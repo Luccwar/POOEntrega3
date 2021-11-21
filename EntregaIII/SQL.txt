@@ -1,0 +1,53 @@
+-- Database: entregaIII
+
+-- DROP DATABASE "entregaIII";
+
+CREATE DATABASE "entregaIII"
+    WITH 
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'Portuguese_Brazil.1252'
+    LC_CTYPE = 'Portuguese_Brazil.1252'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+	
+	
+CREATE TABLE usuariojdbc(
+	id BIGINT NOT NULL,
+	nome CHARACTER VARYING(255),
+	dianasc INTEGER,
+	mesnasc INTEGER,
+	anonasc INTEGER,
+	cpf CHARACTER VARYING(255),
+	login CHARACTER VARYING(255),
+	email CHARACTER VARYING(255),
+	senha CHARACTER VARYING (255),
+	endereco CHARACTER VARYING (255),
+	renda DOUBLE PRECISION,
+	CONSTRAINT primary_pk PRIMARY KEY(id)
+)
+
+CREATE TABLE adminjdbc(
+	id BIGINT NOT NULL,
+	nome CHARACTER VARYING(255),
+	dianasc INTEGER,
+	mesnasc INTEGER,
+	anonasc INTEGER,
+	cpf CHARACTER VARYING(255),
+	permissoes CHARACTER VARYING(255)[],
+	login CHARACTER VARYING(255),
+	email CHARACTER VARYING(255),
+	emailsecundario CHARACTER VARYING(255),
+	senha CHARACTER VARYING (255),
+	CONSTRAINT primary_ak PRIMARY KEY(id)
+)
+
+CREATE SEQUENCE usersequence
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 1;
+
+
+ALTER TABLE usuariojdbc ALTER COLUMN id SET DEFAULT NEXTVAL('usersequence'::regclass);
+
