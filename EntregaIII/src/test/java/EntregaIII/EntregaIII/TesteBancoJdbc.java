@@ -1,5 +1,6 @@
 package EntregaIII.EntregaIII;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
@@ -142,7 +143,8 @@ public class TesteBancoJdbc {
 				System.out.println("Mês em que nasceu: " + admin.getMesNasc());
 				System.out.println("Ano em que nasceu: " + admin.getAnoNasc());
 				System.out.println("CPF: " + admin.getCpf());
-				System.out.println("Permissões: " + admin.getPermissoes());
+				//A linha abaixo pega o array passado na DAO e exibe as informações convertidas
+				System.out.println("Permissões: " + Arrays.toString(admin.getPermissoes()));
 				System.out.println("Login: " + admin.getLogin());
 				System.out.println("Email: " + admin.getEmail());
 				System.out.println("Senha: " + admin.getSenha());
@@ -157,7 +159,7 @@ public class TesteBancoJdbc {
 	public void initBuscarUsuario() {
 		try {
 			ClasseDAO classeDao = new ClasseDAO();
-			Usuario usuario = classeDao.buscar(1L);
+			Usuario usuario = classeDao.buscarUsuario(1L);
 			
 			System.out.println("Nome: " + usuario.getNome());
 			System.out.println("Dia em que nasceu: " + usuario.getDiaNasc());
@@ -174,12 +176,35 @@ public class TesteBancoJdbc {
 			e.printStackTrace();
 		}
 	}
+	
+	@Test
+	public void initBuscarAdmin() {
+		try {
+			ClasseDAO classeDao = new ClasseDAO();
+			Admin admin = classeDao.buscarAdmin(5L);
+			
+			System.out.println("Nome: " + admin.getNome());
+			System.out.println("Dia em que nasceu: " + admin.getDiaNasc());
+			System.out.println("Mês em que nasceu: " + admin.getMesNasc());
+			System.out.println("Ano em que nasceu: " + admin.getAnoNasc());
+			System.out.println("CPF: " + admin.getCpf());
+			//A linha abaixo pega o array passado na DAO e exibe as informações convertidas
+			System.out.println("Permissões: " + Arrays.toString(admin.getPermissoes()));
+			System.out.println("Login: " + admin.getLogin());
+			System.out.println("Email: " + admin.getEmail());
+			System.out.println("Senha: " + admin.getSenha());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@Test
 	public void initAtualizarNomeUsuario() {
 		
 		try {
 			ClasseDAO classeDao = new ClasseDAO();
-			Usuario usuario = classeDao.buscar(1L);
+			Usuario usuario = classeDao.buscarUsuario(1L);
 			
 			usuario.setNome("Lucástico");
 			
@@ -191,10 +216,37 @@ public class TesteBancoJdbc {
 	}
 	
 	@Test
+	public void initAtualizarNomeAdmin() {
+		
+		try {
+			ClasseDAO classeDao = new ClasseDAO();
+			Admin admin = classeDao.buscarAdmin(5L);
+			
+			admin.setNome("Ademiroliro");
+			
+			classeDao.atualizarNomeAdmin(admin);
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}	
+	}
+	
+	@Test
 	public void initDeletarUsuario() {
 		try {
 			ClasseDAO classeDao = new ClasseDAO();
 			classeDao.deletarUsuario(3L);
+					
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+	}
+	
+	@Test
+	public void initDeletarAdmin() {
+		try {
+			ClasseDAO classeDao = new ClasseDAO();
+			classeDao.deletarAdmin(7L);
 					
 		} catch (Exception e) {
 			e.printStackTrace();

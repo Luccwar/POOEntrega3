@@ -51,3 +51,6 @@ START 1;
 
 ALTER TABLE usuariojdbc ALTER COLUMN id SET DEFAULT NEXTVAL('usersequence'::regclass);
 
+/* Tenha em mente que o primeiro id em Admin não será um caso haja algum admin cadastrado e vice-versa */
+ALTER TABLE adminjdbc ALTER COLUMN id SET DEFAULT NEXTVAL('usersequence'::regclass);
+

@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import conexao.jdbc.SingleConnection;
@@ -176,11 +177,12 @@ public List<Usuario> listarUsuario() throws Exception {
 			admin.setMesNasc(resultado.getInt("mesnasc"));
 			admin.setAnoNasc(resultado.getInt("anonasc"));
 			admin.setCpf(resultado.getString("cpf"));
-			//admin.setPermissoes(resultado.getString("permissoes"));
-			for(int i = 0; i<resultado.getString("permissoes").length();i++)
-			{
-				admin.setPermissoes(resultado.getArray("permissoes").toString().split(""));
-			}
+			
+			//Necessário converter o Array de volta para um Array de String
+			Array permissoesArray = resultado.getArray("permissoes");
+			String[] permissoes = (String[])permissoesArray.getArray();
+			admin.setPermissoes(permissoes);
+			
 			admin.setLogin(resultado.getString("login"));
 			admin.setEmail(resultado.getString("email"));
 			admin.setEmail(resultado.getString("emailsecundario"));
@@ -219,7 +221,8 @@ public List<Usuario> listarUsuario() throws Exception {
 		return list;
 	}
 */
-	public Usuario buscar(Long id) throws Exception {
+	
+	public Usuario buscarUsuario(Long id) throws Exception {
 		Usuario usuario = new Usuario();
 
 		String sql = "select * from usuariojdbc where id =" + id;
@@ -245,6 +248,38 @@ public List<Usuario> listarUsuario() throws Exception {
 
 		return usuario;
 	}
+	
+	public Admin buscarAdmin(Long id) throws Exception {
+		Admin admin = new Admin();
+
+		String sql = "select * from adminjdbc where id =" + id;
+
+		PreparedStatement statement = connection.prepareStatement(sql);
+
+		ResultSet resultado = statement.executeQuery();
+
+		while (resultado.next()) {
+			admin.setId(resultado.getLong("id"));
+			admin.setNome(resultado.getString("nome"));
+			admin.setDiaNasc(resultado.getInt("dianasc"));
+			admin.setMesNasc(resultado.getInt("mesnasc"));
+			admin.setAnoNasc(resultado.getInt("anonasc"));
+			admin.setCpf(resultado.getString("cpf"));
+			
+			//Necessário converter o Array de volta para um Array de String
+			Array permissoesArray = resultado.getArray("permissoes");
+			String[] permissoes = (String[])permissoesArray.getArray();
+			admin.setPermissoes(permissoes);
+			
+			admin.setLogin(resultado.getString("login"));
+			admin.setEmail(resultado.getString("email"));
+			admin.setEmail(resultado.getString("emailsecundario"));
+			admin.setSenha(resultado.getString("senha"));
+
+		}
+
+		return admin;
+	}
 
 	public void atualizarNomeUsuario(Usuario usuario) {
 
@@ -264,9 +299,43 @@ public List<Usuario> listarUsuario() throws Exception {
 		}
 	}
 	
+	public void atualizarNomeAdmin(Admin admin) {
+
+		try {
+			String sql = "update adminjdbc set nome = ? where id = " + admin.getId();
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setString(1, admin.getNome());
+			statement.execute();
+			connection.commit();
+		} catch (SQLException e) {
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}
+	}
+	
 	public void deletarUsuario(Long id) {
 		try {
 			String sql = "delete from usuariojdbc where id = " + id;
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.execute();
+			connection.commit();
+		} catch (Exception e) {
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}	
+	}
+	
+	public void deletarAdmin(Long id) {
+		try {
+			String sql = "delete from adminjdbc where id = " + id;
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.execute();
 			connection.commit();
